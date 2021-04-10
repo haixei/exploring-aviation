@@ -7,7 +7,7 @@ m05 = pd.read_csv(f'../data/delays/2019/05.csv')
 m06 = pd.read_csv(f'../data/delays/2019/06.csv')
 m07 = pd.read_csv(f'../data/delays/2019/07.csv')
 
-data = pd.concat(m05, m06, m07)
+data = pd.concat([m05, m06, m07])
 
 data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
 print(data.head())
