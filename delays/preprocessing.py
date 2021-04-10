@@ -1,13 +1,11 @@
 import pandas as pd
 import plotly.express as pltx
-from plotly.subplots import make_subplots
 
 # Load and merge the data sets
 m05 = pd.read_csv(f'../data/delays/2019/05.csv')
 m06 = pd.read_csv(f'../data/delays/2019/06.csv')
-m07 = pd.read_csv(f'../data/delays/2019/07.csv')
 
-data = pd.concat([m05, m06, m07])
+data = pd.concat([m05, m06])
 
 data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
 print(data.head())
@@ -74,4 +72,3 @@ cat_cols = list(set(cols) - set(num_cols))
 for col in cat_cols:
     if col in ['OP_UNIQUE_CARRIER', 'ORIGIN', 'DEST']:
         print(data[col].value_counts())
-        
