@@ -3,16 +3,11 @@ import plotly.express as pltx
 from plotly.subplots import make_subplots
 
 # Load and merge the data sets
-loaded_df = []
-for i in range(11):
-    i = i + 1
-    if i < 10:
-        i = str(i)
-        i = '0' + i
-    month = pd.read_csv(f'../data/delays/2019/{i}.csv')
-    loaded_df.append(month)
+m05 = pd.read_csv(f'../data/delays/2019/05.csv')
+m06 = pd.read_csv(f'../data/delays/2019/06.csv')
+m07 = pd.read_csv(f'../data/delays/2019/07.csv')
 
-data = pd.concat(loaded_df)
+data = pd.concat(m05, m06, m07)
 
 data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
 print(data.head())
