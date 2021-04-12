@@ -44,8 +44,37 @@ def show_dist(data, columns):
 
 # Selected numerical columns
 show_num_cols = ['ACTUAL_ELAPSED_TIME', 'DISTANCE', 'LATE_AIRCRAFT_DELAY', 'AIR_TIME']
-show_dist(data, show_num_cols)
+# >> show_dist(data, show_num_cols)
 
 # Selected caterogical columns
 show_cat_cols = ['DAY_OF_WEEK', 'OP_UNIQUE_CARRIER', 'DEST', 'DIVERTED']
-show_dist(data, show_cat_cols)
+# >> show_dist(data, show_cat_cols)
+
+# Bivariate distribution of features
+# First I'm going to visualise the correlation between months and different types of delays
+def scatter_plot(df, x_name, y_name):
+    scatter_fig = pltx.scatter(df, x=x_name, y=y_name, color_continuous_scale='Teal', color=y_name)
+    scatter_fig.show()
+
+
+# Arrival delay and the distance
+# >> scatter_plot(data, 'ARR_DELAY', 'DISTANCE')
+# >> scatter_plot(data, 'DAY_OF_WEEK', 'ARR_DELAY')
+# >> scatter_plot(data, 'OP_UNIQUE_CARRIER', 'ARR_DELAY')
+
+# Percentage of airport flights in the data set
+names = data['OP_UNIQUE_CARRIER'].value_counts().index.values
+vals = data['OP_UNIQUE_CARRIER'].value_counts().values
+
+fig = pltx.pie(values=vals, names=names, title='Amount of flights by airlines', color_discrete_sequence=pltx.colors.sequential.Bluyl)
+# >> fig.show()
+
+# Correlation heatmap
+# Drop the year since all the data is from the same one
+data = data.drop(['YEAR'], axis=1)
+
+# Create the map
+corr = data.corr()
+corr_fig = pltx.imshow(corr, color_continuous_scale='Teal')
+corr_fig.update_layout(title='Correlation between features')
+# >> corr_fig.show()
