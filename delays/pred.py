@@ -33,7 +33,7 @@ y_train = data['DELAY_LEVEL']
 X_train = data.drop(['DELAY_LEVEL'], axis=1)
 
 data_test = data[data['MONTH'] == 6]
-data_percentage = data_test.head(int(round(data_test.shape[0] * 0.2)))
+data_percentage = data_test.head(int(round(data_test.shape[0] * 0.5)))
 y_test = data_percentage['DELAY_LEVEL']
 X_test = data_percentage.drop(['DELAY_LEVEL'], axis=1)
 
@@ -41,21 +41,22 @@ X_test = data_percentage.drop(['DELAY_LEVEL'], axis=1)
 X_test = X_test.drop(['MONTH'], axis=1)
 X_train = X_train.drop(['MONTH'], axis=1)
 
-print(X_train.isnull().sum(axis=0))
-print(X_test.isnull().sum(axis=0))
-print(y_test.isnull().sum(axis=0))
-
 # Define the models
 # Define the models
 lgbm = LGBMRegressor(
-        num_leaves=16,
+        num_leaves=80,
         learning_rate=0.01,
-        max_depth=4
+        n_estimators=1000,
+        max_depth=7
 )
 
 # Defining error metrics
 def rmse(y, y_pred):
     return sqrt(mean_squared_error(y, y_pred))
+
+# Grid CV
+
+# K-fold validation
 
 # Train the model
 lgbm_model = lgbm.fit(X_train, y_train)
