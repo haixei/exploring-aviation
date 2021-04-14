@@ -78,3 +78,49 @@ corr = data.corr()
 corr_fig = pltx.imshow(corr, color_continuous_scale='Teal')
 corr_fig.update_layout(title='Correlation between features')
 # >> corr_fig.show()
+
+# Create the map
+corr = data.corr()
+corr_fig = pltx.imshow(corr, color_continuous_scale='Teal')
+corr_fig.update_layout(title='Correlation between features')
+# >> corr_fig.show()
+
+# Show the difference in amount of delays by type (small - 1, medium - 2 and large - 3 delay)
+def delay_type(x):
+    if x <= 5:
+        return 'SMALL'
+    if 5 < x < 35:
+        return 'MEDIUM'
+    if x >= 35:
+        return 'BIG'
+
+data['DELAY_LEVEL'] = data['DEP_DELAY'].apply(delay_type)
+delay_bar_fig = pltx.histogram(data, x='OP_UNIQUE_CARRIER', color="DELAY_LEVEL", barmode='group',
+                               color_discrete_sequence=pltx.colors.diverging.Tropic)
+# >> delay_bar_fig.show()
+
+# Show the delays by airline
+airline_delays = {'AIRLINES': [], 'MEAN_DELAYS': [], 'CANC_COUNT': [], 'DIV_COUNT': []}
+for name in names:
+    airline_delays['AIRLINES'].append(name)
+    # Group by airline name
+    get_airline = data[data['OP_UNIQUE_CARRIER'] == name]
+    amount_of_flights = get_airline['OP_UNIQUE_CARRIER'].count()
+    mean_airline_delay = get_airline['ARR_DELAY'].mean()
+    airline_delays['MEAN_DELAYS'].append(mean_airline_delay)
+
+    # Append the counted flight issues
+    airline_canc_count = get_airline[get_airline['CANCELLED'] == 1]['CANCELLED'].count()
+    airline_div_count = get_airline[get_airline['DIVERTED'] == 1]['DIVERTED'].count()
+    airline_delays['CANC_COUNT'].append(airline_canc_count)
+    airline_delays['DIV_COUNT'].append(airline_div_count)
+
+# Show the mean delay
+arr_delay_bar_fig = pltx.bar(airline_delays, x='AIRLINES', y="MEAN_DELAYS",
+                             color_discrete_sequence=['LightSteelBlue'])
+# >> arr_delay_bar_fig.show()
+
+# Amount of flights, cancellations and divertions by airlines
+flight_issues_fig = pltx.bar(airline_delays, x="AIRLINES", y=["CANC_COUNT", "DIV_COUNT"],
+                             color_discrete_map={"CANC_COUNT": "LightSteelBlue", "DIV_COUNT": "#718abd"})
+# >> flight_issues_fig.show()
