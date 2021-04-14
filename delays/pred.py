@@ -9,8 +9,8 @@ from math import sqrt
 print(data.nunique())
 
 # Drop columns that don't contribute a lot of information or pollute the data set
-data = data.drop(['ACTUAL_ELAPSED_TIME', 'DEP_DELAY', 'WHEELS_OFF', 'WHEELS_ON'], axis=1)
-data['DELAY_LEVEL'] = data['DELAY_LEVEL'].map({'SMALL': 1, 'MEDIUM': 2, 'LARGE': 3})
+data = data.drop(['ACTUAL_ELAPSED_TIME', 'DEP_DELAY', 'WHEELS_OFF', 'WHEELS_ON', 'ORIGIN', 'DEST'], axis=1)
+data['DELAY_LEVEL'] = data['DELAY_LEVEL'].map({'SMALL': 1, 'MEDIUM': 2, 'BIG': 3})
 print(data['DELAY_LEVEL'].head())
 
 # Label encoding caterogical columns
@@ -38,16 +38,19 @@ y_test = data_percentage['DELAY_LEVEL']
 X_test = data_percentage.drop(['DELAY_LEVEL'], axis=1)
 
 # Droppig the month column since it won't contribute to the predictions
-X_test = X_test.drop(['MONTH'])
-X_train = X_train.drop(['MONTH'])
+X_test = X_test.drop(['MONTH'], axis=1)
+X_train = X_train.drop(['MONTH'], axis=1)
+
+print(X_train.isnull().sum(axis=0))
+print(X_test.isnull().sum(axis=0))
+print(y_test.isnull().sum(axis=0))
 
 # Define the models
 # Define the models
 lgbm = LGBMRegressor(
-        num_leaves=6,
+        num_leaves=16,
         learning_rate=0.01,
-        n_estimators=1000,
-        max_bin=250
+        max_depth=4
 )
 
 # Defining error metrics
