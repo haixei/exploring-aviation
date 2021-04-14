@@ -1,4 +1,4 @@
-![](https://i.imgur.com/qHgwZR6.png)
+![](https://i.imgur.com/BVeBU4o.png)
 # Exploring Aviation in 2021
 Aviation is a milti billion dollar industry with a long history and complex logistics. Even the smallest delays or issues could cost companies huge amount of money. With the help of machine learning we're able to forecast interest in flights, delays and other factors that impact the budget and planning. In this project I'm going to explore a few different topics based on open datasets on airports and flights.
 
