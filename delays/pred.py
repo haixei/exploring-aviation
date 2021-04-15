@@ -56,20 +56,19 @@ def cv_rmse(model, X, y, cv):
 
 # Define the model
 lgb = LGBMRegressor(
-    num_leaves=60,
-    learning_rate=0.01,
-    n_estimators=1000,
-    max_depth=7,
+    num_leaves=27,
+    learning_rate=0.1,
+    n_estimators=400,
+    max_depth=5,
     max_bin=200,
     boosting_type='goss'
 )
 
 # Grid search for the best parameters
 param_grid = {
-    'num_leaves': [60, 40],
+    'num_leaves': [15, 27],
     'max_bin': [200, 150],
-    'lambda_l1': [0, 1],
-    'lambda_l2': [0, 1]
+    'n_estimators': [400, 1000]
 }
 
 # Cross validation and fitting the model
@@ -81,4 +80,4 @@ lgb_model = gsearch.fit(X=X_train, y=y_train)
 y_pred = lgb_model.predict(X_test)
 
 print('RMSE:', rmse(y_test, y_pred))
-print('Cross Val. RMSE:', cv_rmse(lgb, X_test, y_test, cv))
+print('Cross Val. RMSE:', cv_rmse(lgb_model, X_test, y_test, cv))
