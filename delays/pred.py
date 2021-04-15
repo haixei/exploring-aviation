@@ -1,6 +1,8 @@
 from eda import data
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, roc_auc_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import KFold, cross_val_score
 from lightgbm import LGBMRegressor
 import pandas as pd
 from math import sqrt
@@ -41,27 +43,32 @@ X_test = data_percentage.drop(['DELAY_LEVEL'], axis=1)
 X_test = X_test.drop(['MONTH'], axis=1)
 X_train = X_train.drop(['MONTH'], axis=1)
 
-# Define the models
-# Define the models
-lgbm = LGBMRegressor(
-        num_leaves=80,
-        learning_rate=0.01,
-        n_estimators=1000,
-        max_depth=7
-)
 
 # Defining error metrics
 def rmse(y, y_pred):
     return sqrt(mean_squared_error(y, y_pred))
 
-# Grid CV
 
-# K-fold validation
+def cv_rmse(model, X, y, cv):
+    rmse = sqrt(-cross_val_score(model, X, y, scoring='neg_mean_squared_error', cv=cv))
+    return rmse
 
-# Train the model
-lgbm_model = lgbm.fit(X_train, y_train)
+
+# Define the model
+lgbm = LGBMRegressor(
+    num_leaves=60,
+    learning_rate=0.01,
+    n_estimators=1000,
+    max_depth=7,
+    max_bin=200
+)
+
+# Cross validation and fitting the model
+cv = KFold(n_splits=5, shuffle=True, random_state=42).split(X=X_train, y=y_train)
+lgbm_model = lgbm.fit(X=X_train, y=y_train)
 
 # Test the model
 y_pred = lgbm_model.predict(X_test)
-test_score = rmse(y_test, y_pred)
-print('RMSE:', test_score)
+
+print('RMSE:', rmse(y_test, y_pred))
+print('Cross Val. RMSE:', cv_rmse(lgbm, X_test, y_test, cv))
