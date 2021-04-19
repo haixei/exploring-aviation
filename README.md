@@ -1,6 +1,6 @@
 ![Header](https://i.imgur.com/NSzANCL.png)
 # Exploring Aviation in 2021
-Aviation is a milti billion dollar industry with a long history and complex logistics. Even the smallest delays or issues could cost companies huge amount of money. With the help of machine learning we're able to forecast interest in flights, delays and other factors that impact the budget and planning. In this project I'm going to explore a few different topics based on open datasets on airports and flights.
+Aviation is a multi billion dollar industry with a long history and complex logistics. Even the smallest delays or issues could cost companies huge amount of money. With the help of machine learning we're able to forecast interest in flights, delays and other factors that impact the budget and planning. In this project I'm going to explore a few different topics based on open datasets on airports and flights.
 
 ## Legend
 1. [The cost of delays](docs/eda.md)
