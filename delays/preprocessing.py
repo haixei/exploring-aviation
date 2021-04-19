@@ -20,7 +20,7 @@ for column in column_names:
     column_new_names[column] = column.strip()
 
 data = data.rename(columns=column_new_names)
-# >> print(data.columns.values)
+print(data.columns.values)
 
 # Missing values in percentages
 vals_missing = round(data.isnull().mean() * 100, 2)
@@ -46,23 +46,13 @@ print(round(data.isnull().mean() * 100, 2))
 
 # Sanity check
 sanity = True
-# Early arrivals and dept. delay show negative numbers so we don't  check for arrival time
-# I'm only going trough the columns that should not have any nergative values
+# Early arrivals and dept. delay show negative numbers so we don't check for arrival time
+# I'm only going trough the columns that should not have any negative values
 scheck_cols = ['ARR_TIME', 'TAXI_IN', 'DEP_TIME', 'TAXI_OUT', 'DISTANCE']
 for col in scheck_cols:
     sanity = (data[col] > 0).all()
 
 print('Columns are sane: ', sanity)
-
-# Correlation between features
-corr = data.corr()
-corr_fig = pltx.imshow(corr, color_continuous_scale='Teal')
-corr_fig.update_layout(title='Correlation between features')
-# >> corr_fig.show()
-
-# Drop unnecessary columns, with high correlation or just not contributing
-# a lot of useful information
-data.drop(['YEAR', 'ACTUAL_ELAPSED_TIME', 'DISTANCE', 'DEP_DELAY'], axis=1)
 
 # Check for typos in caterogical variables
 num_cols = data._get_numeric_data().columns
@@ -72,3 +62,7 @@ cat_cols = list(set(cols) - set(num_cols))
 for col in cat_cols:
     if col in ['OP_UNIQUE_CARRIER', 'ORIGIN', 'DEST']:
         print(data[col].value_counts())
+
+
+# Explore the skewness
+print('Skewness:', data.skew())

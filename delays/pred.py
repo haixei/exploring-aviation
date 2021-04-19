@@ -1,11 +1,10 @@
 from eda import data
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error, roc_auc_score
+from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import KFold, cross_val_score
 from lightgbm import LGBMRegressor
 import pandas as pd
-from math import sqrt
 
 # Count unique values
 print(data.nunique())
@@ -45,13 +44,12 @@ X_train = X_train.drop(['MONTH'], axis=1)
 
 
 # Defining error metrics
-def rmse(y, y_pred):
-    return sqrt(mean_squared_error(y, y_pred))
+def auc(y, y_pred):
+    return roc_auc_score(y, y_pred)
 
 
-def cv_rmse(model, X, y, cv):
-    rmse = sqrt(-cross_val_score(model, X, y, scoring='neg_mean_squared_error', cv=cv))
-    return rmse
+def cv_auc(model, X, y, cv):
+    return cross_val_score(model, X, y, scoring='roc_auc', cv=cv)
 
 
 # Define the model
@@ -79,5 +77,5 @@ lgb_model = gsearch.fit(X=X_train, y=y_train)
 # Test the model
 y_pred = lgb_model.predict(X_test)
 
-print('RMSE:', rmse(y_test, y_pred))
-print('Cross Val. RMSE:', cv_rmse(lgb_model, X_test, y_test, cv))
+print('AUC:', auc(y_test, y_pred))
+print('Cross Val. AUC:', cv_auc(lgb_model, X_test, y_test, cv))

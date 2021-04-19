@@ -7,8 +7,6 @@ import numpy as np
 # Show the preprocessed data
 print(data.head())
 
-print('Skewness:', data.skew())
-
 # Visualise the distribution of data using a histogram
 def show_dist(data, columns):
     cols = data[columns]
