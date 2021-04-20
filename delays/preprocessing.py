@@ -1,5 +1,5 @@
 import pandas as pd
-import plotly.express as pltx
+from sklearn.preprocessing import PowerTransformer
 
 # Load and merge the data sets
 m05 = pd.read_csv(f'../data/delays/2019/05.csv')
@@ -65,4 +65,21 @@ for col in cat_cols:
 
 
 # Explore the skewness
-print('Skewness:', data.skew())
+skew = data.skew()
+print('Skewness:', skew)
+
+# Fix using a boxcox transformation
+numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
+num_cols = data.select_dtypes(include=numerics)
+
+pt = PowerTransformer(method='yeo-johnson')
+skewed_features = []
+for feature, skew in skew.items():
+    if skew >= 1.5 and feature in num_cols.columns.values and feature != 'YEAR':
+        skewed_features.append(feature)
+
+pt = PowerTransformer()
+pt.fit(data[skewed_features])
+data[skewed_features] = pt.transform(data[skewed_features])
+
+print('Skewness after normalization:', data.skew())

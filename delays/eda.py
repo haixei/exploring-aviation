@@ -41,12 +41,12 @@ def show_dist(data, columns):
 
 
 # Selected numerical columns
-show_num_cols = ['ACTUAL_ELAPSED_TIME', 'DISTANCE', 'LATE_AIRCRAFT_DELAY', 'AIR_TIME']
+show_num_cols = ['ACTUAL_ELAPSED_TIME', 'DISTANCE', 'LATE_AIRCRAFT_DELAY', 'AIR_TIME', 'WEATHER_DELAY', 'SECURITY_DELAY', 'NAS_DELAY']
 # >> show_dist(data, show_num_cols)
 
 # Selected caterogical columns
-show_cat_cols = ['DAY_OF_WEEK', 'OP_UNIQUE_CARRIER', 'DEST', 'DIVERTED']
-# >> show_dist(data, show_cat_cols)
+show_cat_cols = ['DAY_OF_WEEK', 'OP_UNIQUE_CARRIER', 'DEST', 'ORIGIN']
+show_dist(data, show_cat_cols)
 
 # Bivariate distribution of features
 # First I'm going to visualise the correlation between months and different types of delays
@@ -77,11 +77,6 @@ corr_fig = pltx.imshow(corr, color_continuous_scale='Teal')
 corr_fig.update_layout(title='Correlation between features')
 # >> corr_fig.show()
 
-# Create the map
-corr = data.corr()
-corr_fig = pltx.imshow(corr, color_continuous_scale='Teal')
-corr_fig.update_layout(title='Correlation between features')
-# >> corr_fig.show()
 
 # Show the difference in amount of delays by type (small - 1, medium - 2 and large - 3 delay)
 def delay_type(x):
@@ -91,6 +86,7 @@ def delay_type(x):
         return 'MEDIUM'
     if x >= 35:
         return 'BIG'
+
 
 data['DELAY_LEVEL'] = data['DEP_DELAY'].apply(delay_type)
 delay_bar_fig = pltx.histogram(data, x='OP_UNIQUE_CARRIER', color="DELAY_LEVEL", barmode='group',
@@ -122,3 +118,9 @@ arr_delay_bar_fig = pltx.bar(airline_delays, x='AIRLINES', y="MEAN_DELAYS",
 flight_issues_fig = pltx.bar(airline_delays, x="AIRLINES", y=["CANC_COUNT", "DIV_COUNT"],
                              color_discrete_map={"CANC_COUNT": "LightSteelBlue", "DIV_COUNT": "#718abd"})
 # >> flight_issues_fig.show()
+
+# Show the carries against destination heatmap
+
+# Money lost by airlines on delays
+
+# Checking which airline has the most delays in which category

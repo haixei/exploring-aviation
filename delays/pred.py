@@ -78,4 +78,4 @@ lgb_model = gsearch.fit(X=X_train, y=y_train)
 y_pred = lgb_model.predict(X_test)
 
 print('AUC:', auc(y_test, y_pred))
-print('Cross Val. AUC:', cv_auc(lgb_model, X_test, y_test, cv))
+# print('Cross Val. AUC:', cv_auc(lgb_model, X_test, y_test, cv))
