@@ -2,8 +2,8 @@ import pandas as pd
 from sklearn.preprocessing import PowerTransformer
 
 # Load and merge the data sets
-m05 = pd.read_csv(f'../data/delays/2019/05.csv')
-m06 = pd.read_csv(f'../data/delays/2019/06.csv')
+m05 = pd.read_csv('../data/delays/2019/05.csv')
+m06 = pd.read_csv('../data/delays/2019/06.csv')
 
 data = pd.concat([m05, m06])
 
@@ -68,7 +68,7 @@ for col in cat_cols:
 skew = data.skew()
 print('Skewness:', skew)
 
-# Fix using a boxcox transformation
+# Fix using a yj transformation
 numerics = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']
 num_cols = data.select_dtypes(include=numerics)
 

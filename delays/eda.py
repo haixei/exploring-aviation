@@ -118,9 +118,3 @@ arr_delay_bar_fig = pltx.bar(airline_delays, x='AIRLINES', y="MEAN_DELAYS",
 flight_issues_fig = pltx.bar(airline_delays, x="AIRLINES", y=["CANC_COUNT", "DIV_COUNT"],
                              color_discrete_map={"CANC_COUNT": "LightSteelBlue", "DIV_COUNT": "#718abd"})
 # >> flight_issues_fig.show()
-
-# Show the carries against destination heatmap
-
-# Money lost by airlines on delays
-
-# Checking which airline has the most delays in which category
