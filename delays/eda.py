@@ -46,7 +46,7 @@ show_num_cols = ['ACTUAL_ELAPSED_TIME', 'DISTANCE', 'LATE_AIRCRAFT_DELAY', 'AIR_
 
 # Selected caterogical columns
 show_cat_cols = ['DAY_OF_WEEK', 'OP_UNIQUE_CARRIER', 'DEST', 'ORIGIN']
-show_dist(data, show_cat_cols)
+# >> show_dist(data, show_cat_cols)
 
 # Bivariate distribution of features
 # First I'm going to visualise the correlation between months and different types of delays

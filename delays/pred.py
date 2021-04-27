@@ -1,16 +1,16 @@
 from eda import data
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import KFold, cross_val_score
+from sklearn.model_selection import KFold, cross_val_predict
 from lightgbm import LGBMRegressor
+from sklearn.model_selection import GridSearchCV
 import pandas as pd
 
 # Count unique values
 print(data.nunique())
 
 # Drop columns that don't contribute a lot of information or pollute the data set
-data = data.drop(['ACTUAL_ELAPSED_TIME', 'DEP_DELAY', 'WHEELS_OFF', 'WHEELS_ON', 'ORIGIN', 'DEST'], axis=1)
+data = data.drop(['ACTUAL_ELAPSED_TIME', 'DEP_DELAY', 'WHEELS_OFF', 'WHEELS_ON', 'ORIGIN', 'DEST', 'ARR_DELAY'], axis=1)
 data['DELAY_LEVEL'] = data['DELAY_LEVEL'].map({'SMALL': 1, 'MEDIUM': 2, 'BIG': 3})
 print(data['DELAY_LEVEL'].head())
 
@@ -27,6 +27,11 @@ data = pd.concat([data_without_target, delay_level], axis=1)
 transformer = StandardScaler()
 transformer.fit(data)
 transformer.transform(data)
+
+# Checking the data
+print('DATA FOR THE MODEL:')
+print(data.shape)
+print(data.columns.values)
 
 # Preparing the data's train and test variables
 data_train = data[data['MONTH'] == 5]
@@ -48,8 +53,8 @@ def auc(y, y_pred):
     return roc_auc_score(y, y_pred)
 
 
-def cv_auc(model, X, y, cv):
-    return cross_val_score(model, X, y, scoring='roc_auc', cv=cv)
+def cv_pred(model, X, y, cv):
+    return cross_val_predict(model, X, y, cv=cv)
 
 
 # Define the model
@@ -70,12 +75,13 @@ param_grid = {
 }
 
 # Cross validation and fitting the model
-cv = KFold(n_splits=5, shuffle=True, random_state=42).split(X=X_train, y=y_train)
+cv = KFold(n_splits=5, shuffle=True, random_state=42)
 gsearch = GridSearchCV(estimator=lgb, param_grid=param_grid, cv=cv)
 lgb_model = gsearch.fit(X=X_train, y=y_train)
 
-# Test the model
 y_pred = lgb_model.predict(X_test)
 
+# Test the model
+cvpred_vals = cv_pred(lgb_model, X_test, y_test, cv)
+print('Cross Val. AUC:', roc_auc_score(y_test, cvpred_vals))
 print('AUC:', auc(y_test, y_pred))
-# print('Cross Val. AUC:', cv_auc(lgb_model, X_test, y_test, cv))
