@@ -10,7 +10,7 @@ Since creating the previous part about delays I've learned about few things that
 
 ## Exploring the information
 
-In this section we're going to explore the data we're working with and show some plots on distribution as well as the relationship between features and **our target - the price.** We will start by displaying some general information. As an introduction I will say that we're dealing with New Zeland's data from the year 2019. 
+In this section we're going to explore the data we're working with and show some plots on distribution as well as the relationship between features and **our target - the price.** We will start by displaying some general information. As an introduction I will say that we're dealing with New Zealand's data from the year 2019. 
 
 ```
 RangeIndex: 162833 entries, 0 to 162832
@@ -33,9 +33,9 @@ Data columns (total 11 columns):
 
 ### The schema
 
-| Travel Date | Dep. airport | Dep. time | Arr. airport | Arr. time | Duration | Direct | Transit | Transit | Airline | Airfare(NZ$) |
-| ----------- | ------------ | --------- | ------------ | --------- | -------- | ------ | ------- | ------- | ------- | ------------ |
-|             |              |           |              |           |          |        |         |         |         |              |
+| Travel Date | Dep. airport | Dep. time | Arr. airport | Arr. time | Duration | Direct   | Transit       | Baggage                  | Airline         | Airfare(NZ$) |
+| ----------- | ------------ | --------- | ------------ | --------- | -------- | -------- | ------------- | ------------------------ | --------------- | ------------ |
+| 19/09/2019  | AKL          | 1:35 PM   | CHC          | 3:00 PM   | 1h 25m   | (Direct) | 4h 35m in NSN | Checked bag NOT included | Air New Zealand | 442          |
 
 As we can see in the table I created above, there's some data that needs to be transformed to be useful and some columns to be cleaned. Before anything I will also see how many null values we have in case that we don't have to work on a column because it doesn't consist enough important information. For now the plan is to:
 
@@ -123,39 +123,27 @@ We have a compact amount of solid features this time. As we can see, two of them
 
 
 
-Correlation scatters
-
-
-
-
-
-Heatmaps
-
-
-
-
-
-
-
-Skewness
-
-
-
 ## Processing the features
 
+As I said before, in this document we won't too far into data exploration so I'm simply going to fix some common issues that the dataset could have and try to get some information. Our end goal there is to create an efficient model that can tackle a lot of categorical features and minimize their amount.
+
+### Feature encoding
+
+First of all, I want to encode out categorical data and for this purpose I'm going to use **Binary Encoding** that helps us a lot with the amount of columns we need to create. When it comes to situations like that, we want to keep columns like that but polluting our dataset by incorporating One Hot Encoding is simply not efficient, sometimes you might even end up with 400+ features. The way Binary Encoding is following: it converts multi-class labels into binary labels and creates a column for each binary digit. 
+
+**Remember:** _If there are **n** unique categories, then binary encoding results in log(base 2)ⁿ features._
+
+Let's imagine having 100 features. When using One Hot Encoding to distinguish between them in a numerical form we would need to create 100 new features. If we switch to binary we get only 7 features. For this purpose I'm going to use Scikit's build-in method called LabelBinarizer. Under I will present how the process will work.
+
+![Binary Encoding](https://i.imgur.com/2E1OqMu.png)
+
+### Processing dates & time
 
 
-## Creating new features
 
 
 
-## Removing outliers
-
-
-
-## Encoding the origin and destination
-
-
+### Scaling the data
 
 
 

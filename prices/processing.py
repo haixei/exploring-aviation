@@ -45,3 +45,5 @@ corr_fig = pltx.imshow(corr, color_continuous_scale='Teal')
 corr_fig.update_layout(title='Correlation between features')
 
 corr_fig.show()
+
+# Binary encoding the features
