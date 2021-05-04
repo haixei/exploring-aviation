@@ -1,5 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import PowerTransformer
+from numpy import log2
+import plotly.express as pltx
 
 # Load and merge the data sets
 m05 = pd.read_csv('../data/delays/2019/05.csv')
@@ -63,6 +65,30 @@ for col in cat_cols:
     if col in ['OP_UNIQUE_CARRIER', 'ORIGIN', 'DEST']:
         print(data[col].value_counts())
 
+
+# Parallel between the features
+data['MONEY_LOST'] = data['ARR_DELAY']
+data['MONEY_LOST'] = data.apply(lambda row: (abs(row['LATE_AIRCRAFT_DELAY'] * 25.26
+                                             + row['ARR_DELAY'] * 24.55)),
+                                axis=1)
+
+data['MONEY_LOST'] = data['MONEY_LOST'].apply(log2)
+data['ARR_DELAY_ONLY'] = [0 if arr <= 0 else arr for arr in data['ARR_DELAY']]
+data['MONEY_LOST'] = [0 if money <= 0 else money for money in data['MONEY_LOST']]
+data['ARR_DELAY_ONLY'] = data['ARR_DELAY_ONLY'].apply(log2)
+
+fig_info = pltx.scatter(data, x="ARR_DELAY_ONLY", y="MONEY_LOST", color="OP_UNIQUE_CARRIER",
+                              log_x=True)
+fig_info.update_traces(marker=dict(size=3))
+fig_info.show()
+
+# Show density
+fig_density = pltx.density_contour(data.head(60000), x="DISTANCE", y="MONEY_LOST", color="OP_UNIQUE_CARRIER", marginal_x="rug", marginal_y="histogram")
+# >> fig_density.show()
+
+# Show density heatmap for cities
+fig_city = pltx.density_heatmap(data.head(30000), x="ORIGIN", y="DEST", marginal_y="histogram")
+# >> fig_city.show()
 
 # Explore the skewness
 skew = data.skew()
