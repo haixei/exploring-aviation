@@ -10,7 +10,7 @@ import numpy as np
 import plotly.express as pltx
 
 # Select a subsample of data
-data = data.head(2000)
+data = data.head(4000)
 y = data['Airfare(NZ$)']
 X = data.drop(['Airfare(NZ$)'], axis=1)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
@@ -87,7 +87,7 @@ for key, value in models.items():
 # Add the blended accuracy as an addition
 acc['models'].append('Blended')
 blend_pred = -(blended(X_test).mean())
-acc['acc'].append()
+acc['acc'].append(blend_pred)
 print('MSE for Blended' +' --> ' , blend_pred)
 
 fig_model_acc = pltx.line(x=acc['models'], y=acc['acc'], title='Accuracy of the models (MSE)')
