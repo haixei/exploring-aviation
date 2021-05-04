@@ -1,11 +1,11 @@
 from preprocessing import data
 import plotly.express as pltx
 from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-import numpy as np
+from numpy import sqrt
 
 # Show the preprocessed data
 print(data.head())
+
 
 # Visualise the distribution of data using a histogram
 def show_dist(data, columns):
@@ -13,7 +13,7 @@ def show_dist(data, columns):
 
     # Establish a canvas for the plots
     data_col_shape = cols.shape[1]
-    col_num = int(data_col_shape/2)
+    col_num = int(data_col_shape / 2)
     multiplot_fig = make_subplots(rows=2, cols=col_num,
                                   horizontal_spacing=0.05)
     row = 1
@@ -41,11 +41,14 @@ def show_dist(data, columns):
 
 
 # Selected numerical columns
-show_num_cols = ['ACTUAL_ELAPSED_TIME', 'DISTANCE', 'LATE_AIRCRAFT_DELAY', 'AIR_TIME', 'WEATHER_DELAY', 'SECURITY_DELAY', 'NAS_DELAY']
+show_num_cols = ['ACTUAL_ELAPSED_TIME', 'DISTANCE', 'LATE_AIRCRAFT_DELAY', 'AIR_TIME', 'WEATHER_DELAY',
+                 'SECURITY_DELAY', 'NAS_DELAY']
 # >> show_dist(data, show_num_cols)
 
 # Selected caterogical columns
 show_cat_cols = ['DAY_OF_WEEK', 'OP_UNIQUE_CARRIER', 'DEST', 'ORIGIN']
+
+
 # >> show_dist(data, show_cat_cols)
 
 # Bivariate distribution of features
@@ -64,7 +67,8 @@ def scatter_plot(df, x_name, y_name):
 names = data['OP_UNIQUE_CARRIER'].value_counts().index.values
 vals = data['OP_UNIQUE_CARRIER'].value_counts().values
 
-fig = pltx.pie(values=vals, names=names, title='Amount of flights by airlines', color_discrete_sequence=pltx.colors.sequential.Bluyl)
+fig = pltx.pie(values=vals, names=names, title='Amount of flights by airlines',
+               color_discrete_sequence=pltx.colors.sequential.Bluyl)
 # >> fig.show()
 
 # Correlation heatmap
@@ -75,6 +79,8 @@ data = data.drop(['YEAR'], axis=1)
 corr = data.corr()
 corr_fig = pltx.imshow(corr, color_continuous_scale='Teal')
 corr_fig.update_layout(title='Correlation between features')
+
+
 # >> corr_fig.show()
 
 
@@ -118,3 +124,4 @@ arr_delay_bar_fig = pltx.bar(airline_delays, x='AIRLINES', y="MEAN_DELAYS",
 flight_issues_fig = pltx.bar(airline_delays, x="AIRLINES", y=["CANC_COUNT", "DIV_COUNT"],
                              color_discrete_map={"CANC_COUNT": "LightSteelBlue", "DIV_COUNT": "#718abd"})
 # >> flight_issues_fig.show()
+

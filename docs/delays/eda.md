@@ -9,6 +9,28 @@ According to airlines.org in 2019  **the average cost of an airport block for U.
 
 
 
+## Calculating money lost because of delays
+
+Thanks for the data from Airlines.org we can estimate which airlines lost the most money on the delays and why. Let's go trough some basic information on the topic first. 
+
+> In 2019, the average cost of aircraft block (taxi plus airborne) time for U.S. passenger airlines was $74.24 per minute. Fuel costs, the largest line item, declined 6.5 percent to $25.26 per minute. Crew costs, the second largest line item, rose 5 percent to $24.55 per minute. Maintenance and aircraft ownership actually respectively grew 2.2 percent and 3.2 percent, while all other costs rose 1.1 percent.
+
+![Feature correlation heatmap](../../plots/delays/lines_price_arr_delay.png)
+
+On the plot above we can see how the money lost relates to the arrival delay. Note that the ARR_DELAY_ONLY is just a temporary column created for the visualisation that has only values bigger than 0, and 0 for every negative value. In this sections, I scaled some features with the log2 method for a clearer graph.
+
+ ![Feature correlation heatmap](../../plots/delays/money_lost_arr_scatter.png)
+
+This graph wasn't actually that intentional, sometimes we need to play around with different graph types to explore the data. It might seem normal at first but what fascinated me about it is how quickly the data skyrockets at the end, the slope is curving up right away when it gets to the big numbers. After seeing this correlation I thought it might be interesting to plot it in a bit different way, that better showcases the idea.
+
+
+
+![Feature correlation heatmap](../../plots/delays/money_lost_scatter_better.png)
+
+Here we can see a polished version of the same plot, in this case with scaled features. We can see a beautiful pattern emerging from the first 60k rows of data, showcasing the relationship between features. I think it's very intriguing that we have this clear shape. The bigger the array delay, the bigger gets the minimum amount of money that airlines can spend.
+
+
+
 ## Exploring the features
 
 First thing that I want to see is the distribution of the selected features. We already saw the skewness and some important information about them, but there's a few that might contribute some information if visualised. I'm going to create two groups of histograms, one for numerical and second for categorical features.
@@ -73,6 +95,8 @@ Here we have mean delays by airline, a little bit different way of showcasing th
 
 _Small note: Some of the plots were created based on not normalized data to maintain the original time amount_
 
+
+
 ## Creating a feature heatmap
 
 Before going forward I also want to take a quick look at the correlation of the features. The heatmap displays the relationships between them using a gradient colour scale. The purpose of showcasing it is the search for features that might be useful in the prediction as well as identifying features that are correlated to the point of containing similar data. As we can see on the graph below there's a few interesting relations.
@@ -81,6 +105,8 @@ Before going forward I also want to take a quick look at the correlation of the 
 - Air time, distance and actual elapsed time are probably holding information about the same data under different names
 
 ![Feature correlation heatmap](../../plots/delays/heatmap.png)
+
+
 
 
 
