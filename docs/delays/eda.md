@@ -84,4 +84,4 @@ Before going forward I also want to take a quick look at the correlation of the 
 
 
 
-Knowing all of that, let's head to the next section where I'm [building the prediction model.](predictions.md)
+_Knowing all of that, let's head to the next section where I'm [building the prediction model.](predictions.md)_

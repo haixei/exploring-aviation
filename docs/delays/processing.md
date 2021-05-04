@@ -162,3 +162,8 @@ NAS_DELAY               0.044775
 SECURITY_DELAY         12.371745
 LATE_AIRCRAFT_DELAY     0.001248
 ```
+
+
+
+_After taking care of the data, let's start the [explorative analysis.](predictions.md)_
+

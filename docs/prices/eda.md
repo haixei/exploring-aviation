@@ -1,11 +1,6 @@
 # Understanding & Processing The Data
 Since creating the previous part about delays I've learned about few things that might help me with past issues. In this document I will try to understand the data that I'm working with without a very in-depth analysis. I'm going to focus more on feature engineering and processing the data to fit my needs accordingly to the data set statistics. 
 
-### Key ideas:
-
-- When working with a bigger dataset, it's useful to set up a Big Query
-- There is a way of encoding the features with a lot of categories inside called label encoding
-
 
 
 ## Exploring the information
@@ -31,6 +26,8 @@ Data columns (total 11 columns):
 
 ```
 
+
+
 ### The schema
 
 | Travel Date | Dep. airport | Dep. time | Arr. airport | Arr. time | Duration | Direct   | Transit       | Baggage                  | Airline         | Airfare(NZ$) |
@@ -52,6 +49,10 @@ As we can see in the table I created above, there's some data that needs to be t
 
     
 
+### Missing columns & sanity of the information
+
+It looks like the baggage column won't be too useful so I think it's fair to just drop it. In the case of null values below 0.05% I'm going to do the same. The only column I will take care of is the transit. When it comes to sanity, it seems like all the features are alright in that department.
+
 ```
 Travel Date      0.00
 Dep. airport     0.01
@@ -66,29 +67,6 @@ Airline          0.00
 Airfare(NZ$)     0.00
 ```
 
-It looks like the baggage column won't be too useful so I think it's fair to just drop it. In the case of null values below 0.05% I'm going to do the same. The only column I will take care of is the transit.
-
-### Missing columns & sanity of the information
-
-I checked for missing columns and such but it's different than the last time, the data set was previously cleaned so we're working with a clean and organized one. I'm still going to check for sanity of them just in case.
-
-```
-Unnamed: 0           0.0
-ItinID               0.0
-MktID                0.0
-MktCoupons           0.0
-Quarter              0.0
-Origin               0.0
-OriginWac            0.0
-Dest                 0.0
-DestWac              0.0
-Miles                0.0
-ContiguousUSA        0.0
-NumTicketsOrdered    0.0
-AirlineCompany       0.0
-PricePerTicket       0.0
-```
-
 ```
 Columns are sane: True
 ```
@@ -97,10 +75,10 @@ Columns are sane: True
 
 ### Skewness
 
-One of the things that we should definitely check is skewness, we can then verify which is considered normal for this dataset and use transformation on columns that don't adhere to that idea. I noticed that most of the columns have 1.5 - 3, but there were a few with a big difference. Here's the numbers after using the Yeo-Johnson method.
+One of the things that we should definitely check is skewness, we can then verify which is considered normal for this dataset and use transformation on columns that don't adhere to that idea. I noticed that most of the columns have 1.5 - 3, but there were a few with a big difference.
 
 ```
-Skewness after normalization:
+Skewness:
 ItinID              -2.045501
 MktID               -2.045501
 MktCoupons           7.251936
@@ -127,6 +105,53 @@ We have a compact amount of solid features this time. As we can see, two of them
 
 As I said before, in this document we won't too far into data exploration so I'm simply going to fix some common issues that the dataset could have and try to get some information. Our end goal there is to create an efficient model that can tackle a lot of categorical features and minimize their amount.
 
+
+
+### Taking care of missing values
+
+Before I try to encode anything, I'm going to take care of missing values so they don't get in our way while pre-processing the data. I'm going to process with the plan I explained before, in this section I'm only going to show the end result of what I did for the context purposes.
+
+```python
+data = data.drop(['Baggage'], axis=1)
+data = data.dropna(subset=['Dep. airport', 'Arr. airport', 'Airline'])
+```
+
+First I dropped everything we didn't need, the whole Baggage column that had mostly missing values as well as a small percent of the other columns. The only column that had a lot of them was Transit but I will take care of them in the next section because these NaN's are actually useful for us.
+
+_Note: While doing binary encoding later and changing the names of the columns so they don't repeat, I found out that there were some missing values left, but since a column got created for them in every category, I simply dropped them. I didn't look into what could cause it but it could have been a different encoding of a non defined value that dropna method didn't detect. It did not cause trouble so I won't go into it._
+
+
+
+### Transforming dates and time
+
+When it comes to processing time, we need to consider two things:
+
+- The way in which the time is encoded
+- If the time has any meaning useful for us
+
+In this scenario we're dealing with a few columns: Transit, Travel Date, Duration, Arr. time and Dep. time. These columns all together contain three different types of time descriptions: AM/PM, our normal date type (DD/MM/YYYY) and hours/minutes. Let's start from encoding the Transit, and first, before doing anything, I want to look into the way the values in this column look. We deal with two different information, the time that was needed for the transit but also the duration of it. I decided to split it to two different categories:
+
+```python
+# Dividing transit into two columns
+data[['TransitTime', 'TransitPlace']] = data['Transit'].str.split(' in ', expand=True)
+print(data.tail())
+
+# Transform to transit time to minutes
+data['TransitTime'] = data['TransitTime'].fillna(0)
+data['TransitPlace'] = data['TransitPlace'].fillna('None')
+```
+
+
+
+Next I took care of the values in the TransitTime column. I changed it so everything is turned to minutes and removed the h/m letters so we are only left with numerical data. Since the AM/PM time can be shortened to just the values since they increment till the day is over, I simply removed the ":" in-between hours and minutes. The last thing I did was splitting the date to month and day, at the same time removing the year since it's the same for every row in the data set.
+
+```
+# Transform the date column to two columns
+data[['Day', 'Month', 'Year']] = data['Travel Date'].str.split('/', expand=True)
+```
+
+
+
 ### Feature encoding
 
 First of all, I want to encode out categorical data and for this purpose I'm going to use **Binary Encoding** that helps us a lot with the amount of columns we need to create. When it comes to situations like that, we want to keep columns like that but polluting our dataset by incorporating One Hot Encoding is simply not efficient, sometimes you might even end up with 400+ features. The way Binary Encoding is following: it converts multi-class labels into binary labels and creates a column for each binary digit. 
@@ -137,13 +162,20 @@ Let's imagine having 100 features. When using One Hot Encoding to distinguish be
 
 ![Binary Encoding](https://i.imgur.com/2E1OqMu.png)
 
-### Processing dates & time
+After that, the only thing I need to encode to create a fully numerical data set is the Direct column. I used LabelEncoding for it because one category is more than another, it makes sense to use it here.
+
+```python
+le = LabelEncoder()
+data['Direct'] = le.fit_transform(data['Direct'])
+```
 
 
 
+### Normalizing & scaling the data
+
+The last thing I wanted to take care of is normalizing and scaling the data, in our case these steps are very short. When it comes to normalisation I tried both methods, yeo-yeo-johnson and box-cox, the latter turned out to provide a more satisfying result. I decided to scale the data since some models prefer it and also the RobustScaler is especially good with data that contains outliers. It would be really hard to visualise them with such a huge data set and clean by hand or at least the increase in accuracy in comparison to time needed to do it is not satisfying to me.
 
 
-### Scaling the data
 
-
+_After taking care of the data, let's head to the next section where I'm [building the prediction model.](predictions.md)_
 
