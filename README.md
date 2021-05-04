@@ -7,10 +7,9 @@ Aviation is a multi billion dollar industry with a long history and complex logi
 	- [1.1 Data cleaning and preprocessing](docs/)
 	- [1.2 About flight delays and their impact](docs/)
 	- [1.3 Forestasting delays (LGB)](docs/)
-2. [Predicting the interest in flights](docs/eda.md)
-	- [2.1 Introduction to the topic](docs/)
-	- [2.2 Analysing the data and preprocessing](docs/)
-	- [2.2 Predicting the fares (Keras vs LGB)](docs/)
+2. [Forecasting the prices](docs/eda.md)
+	- [2.1 Introduction & processing](docs/)
+	- [2.2 Predicting the ticket fares](docs/)
 
 ## Data
 ```
