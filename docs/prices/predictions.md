@@ -49,18 +49,14 @@ Short note on gradient boost to reason my decision there - it's a very, very pow
 
 ```Python
 lgbm = LGBMRegressor(
-        num_leaves=6,
-        learning_rate=0.01,
-        n_estimators=1000,
-        max_bin=250
+        learning_rate=0.1,
+        max_bin=150,
+        boosting_type='goss'
 )
 
-svr = SVR(kernel='rbf', epsilon=0.008)
+svr = SVR(kernel='rbf')
 
-rf = RandomForestRegressor(max_depth=15,
-                           min_samples_split=5,
-                           min_samples_leaf=5,
-                           max_features=None,
+rf = RandomForestRegressor(n_jobs=-1,
                            oob_score=True)
 ```
 
@@ -73,9 +69,10 @@ We're working with a few models and how much we can estimate what the best param
 ```Python
 # Grid-search
 param_grid_lgbm = {
-    'num_leaves': [15, 27],
-    'max_bin': [200, 150],
-    'n_estimators': [400, 1000]
+    'num_leaves': [80],
+    'max_depth': [7, 10],
+    'n_estimators': [200],
+    'min_data_in_leaf': [100, 300]
 }
 
 param_grid_svr = {
@@ -85,8 +82,8 @@ param_grid_svr = {
 }
 
 param_grid_rf = {
-    'n_estimators': [200, 500],
-    'max_depth': [4, 10]
+    'n_estimators': [50, 100],
+    'max_depth': [5, 20]
 }
 ```
 
@@ -99,20 +96,23 @@ Model stacking is nothing else than an efficient way of creating new predictions
 ```Python
 # Stacking the models
 stack = StackingCVRegressor(regressors=(lgbm_fit, rf_fit, svr_fit),
-                            meta_regressor=lgbm_fit,
+                            meta_regressor=svr_fit,
                             use_features_in_secondary=True)
 # ...
 
 # Blend predictions
 def blended(X):
-    return ((0.15 * svr_fit.predict(X)) +
-            (0.25 * lgbm_fit.predict(X)) +
-            (0.25 * rf_fit.predict(X)) +
-            (0.35 * stack.predict(np.array(X))))
+    return ((0.20 * svr_fit.predict(X)) +
+            (0.15 * lgbm_fit.predict(X)) +
+            (0.15 * rf_fit.predict(X)) +
+            (0.50 * stack.predict(np.array(X))))
 ```
 
 
 
 ## Exploring the results
 
-It's finally time to predict the test data and see how well our model performs. I will display the MSE for each model and the stacked model first and then talk about the final, blended result. The only thing that might be an issue is overfitting, so I make sure to print the score on both train and test data to see if the model is generalizing properly or not.
+**It's finally time to predict the test data and see how well our model performs.** I will display the MSE for each model and the stacked model first and then talk about the final, blended result. Finding the best result wasn't in fact something that took a short amount of time, it was the opposite. Aside of running the cross validation and the grid search, even after getting a satisfying result I decided to go into more detail on how to make the model in the better. In the early stages it was very visible that it had some trouble with overfitting, the difference between predictions on the train and test sets was significant (0.067 vs 0.15). It made me rethink the parameters that I used and I decided to tweak them a little bit, above you see the final code but before it got this way I also tried different ways to prevent overfitting in the LGBM and making the training time of the Random Forest quicker, at the same time making sure that it won't take a toll on the accuracy. The models are quite popular and the documentation for them is really good, there's also plenty of papers and articles on them so finding the information didn't take much time. **Here's the last and the best result I got so far:**
+
+![Accuracy](../../plots/prices/Acc.png)
+
