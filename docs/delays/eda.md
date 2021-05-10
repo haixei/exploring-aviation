@@ -5,7 +5,7 @@ In this section we're going to dive deep into the previously processed data. The
 
 ## Introduction
 
-According to airlines.org in 2019  **the average cost of an airport block for U.S. passenger airlines was $74.24 per minute. ** And crew costs, the second largest line item, rose 5 percent to $24.55 per minute. Delayed aircraft are estimated to have cost the airlines several billion dollars in additional expense and airlines fight against these situations in every way they can. In this data analysis I'm going to dive deep into US airlines and their reported delay from that year to deliver some insight into the problems each of them faces and how the numbers look on a larger scale.
+According to airlines.org in 2019  **the average cost of an airport block for U.S. passenger airlines was $74.24 per minute.** And crew costs, the second largest line item, rose 5 percent to $24.55 per minute. Delayed aircraft are estimated to have cost the airlines several billion dollars in additional expense and airlines fight against these situations in every way they can. In this data analysis I'm going to dive deep into US airlines and their reported delay from that year to deliver some insight into the problems each of them faces and how the numbers look on a larger scale.
 
 
 
@@ -59,15 +59,15 @@ In this plot we can clearly see how the distance affects potential delays, I wil
 
 
 
-![Scatter plot for arrival delay against airline](C:\Users\Aleksandra\PycharmProjects\exploring-aviation\plots\delays\arrdelay-airline.png)
+![Scatter plot for arrival delay against airline](../../plots/delays/arrdelay-airline.png)
 
 Next up we have arrival delay by airline and from this plot we can clearly see which of them have the best scores. WN, F9 and AS have barely any high delays. HA has a few surprise big delays and DL is very consistent in every kind of delay. EV, UA and AA score the highest when it comes to arrival delay and the frequency of them.
 
-![Scatter plot for arrival delay against the day of the week](C:\Users\Aleksandra\PycharmProjects\exploring-aviation\plots\delays\arrdelay-wayofweek-scatter.png)
+![Scatter plot for arrival delay against the day of the week](../../plots/delays/arrdelay-wayofweek-scatter.png)
 
 When it comes to delays by the day of the week, people often make the wrong assumption that there's going to be the most big delays on Fridays, and nothing less correct. From the data gathered we know that the biggest delays happen on Mondays and Thursdays. 
 
-![Amount of flights by airlines](C:\Users\Aleksandra\PycharmProjects\exploring-aviation\plots\delays\flights-by-airlines.png)
+![Amount of flights by airlines](../../plots/delays/flights-by-airlines.png)
 
 To finish this section I'm going to look into the amount of flights in % by airlines. Looking at this we're met with a little bit different view on the previous data. We should take the size of an airline as well as the amount of its flight into consideration, smaller airports might have less issues because of their size. Big airlines like American Airlines taking up 12.6% of all flights will have more variance in the delays because of the sole variety they provide.
 
@@ -77,11 +77,11 @@ To finish this section I'm going to look into the amount of flights in % by airl
 
 In this comparison I will take a quick look at how different airlines approach the delays. First I'm going to start by plotting all cancelled and diverted flights   based on the airline.
 
-![Amount of cancelled and diverted flights by an airline](C:\Users\Aleksandra\PycharmProjects\exploring-aviation\plots\delays\canc-and-div-airlines.png)
+![Amount of cancelled and diverted flights by an airline](../../plots/delays/canc-and-div-airlines.png)
 
 It seems like most airlines have the same % of diverted flights aside of DL. Not only they have the least cancelled and diverted flight in general compared to other big airlines like AA or WN but they also interestingly more often divert flights than cancel them. One other considerably big airline, UA, also have a significantly less flights having issues but in their case there's more cancelled than diverted flights.
 
-![Delay level by airline](C:\Users\Aleksandra\PycharmProjects\exploring-aviation\plots\delays\delay-level-by-airline.png)
+![Delay level by airline](../../plots/delays/delay-level-by-airline.png)
 
 Now from this plot we can extract following information:
 
@@ -89,7 +89,7 @@ Now from this plot we can extract following information:
 - AS, YX and HA have a small probability of big delays happening
 - DL and OO have very good amount of medium and big delays compared to other big airlines
 
-![Mean delays by airline](C:\Users\Aleksandra\PycharmProjects\exploring-aviation\plots\delays\mean-delays.png)
+![Mean delays by airline](../../plots/delays/mean-delays.png)
 
 Here we have mean delays by airline, a little bit different way of showcasing the same data from the previous plot. From this we can tell that DL, HA and AS have the smallest mean delay happening from which DL is considerably big airline. EV on the other hand has the biggest mean delay of all while being what we'd consider in this data set a medium size airline.
 
