@@ -165,5 +165,5 @@ LATE_AIRCRAFT_DELAY     0.001248
 
 
 
-_After taking care of the data, let's start the [explorative analysis.](predictions.md)_
+_After taking care of the data, let's start the [explorative analysis.](eda.md)_
 
