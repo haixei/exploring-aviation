@@ -15,19 +15,13 @@ Thanks for the data from Airlines.org we can estimate which airlines lost the mo
 
 > In 2019, the average cost of aircraft block (taxi plus airborne) time for U.S. passenger airlines was $74.24 per minute. Fuel costs, the largest line item, declined 6.5 percent to $25.26 per minute. Crew costs, the second largest line item, rose 5 percent to $24.55 per minute. Maintenance and aircraft ownership actually respectively grew 2.2 percent and 3.2 percent, while all other costs rose 1.1 percent.
 
-![Feature correlation heatmap](../../plots/delays/lines_price_arr_delay.png)
+![Arrival delay](../../plots/delays/lines_price_arr_delay.png)
 
 On the plot above we can see how the money lost relates to the arrival delay. Note that the ARR_DELAY_ONLY is just a temporary column created for the visualisation that has only values bigger than 0, and 0 for every negative value. In this sections, I scaled some features with the log2 method for a clearer graph.
 
- ![Feature correlation heatmap](../../plots/delays/money_lost_arr_scatter.png)
 
-This graph wasn't actually that intentional, sometimes we need to play around with different graph types to explore the data. It might seem normal at first but what fascinated me about it is how quickly the data skyrockets at the end, the slope is curving up right away when it gets to the big numbers. After seeing this correlation I thought it might be interesting to plot it in a bit different way, that better showcases the idea.
-
-
-
-![Feature correlation heatmap](../../plots/delays/money_lost_scatter_better.png)
-
-Here we can see a polished version of the same plot, in this case with scaled features. We can see a beautiful pattern emerging from the first 60k rows of data, showcasing the relationship between features. I think it's very intriguing that we have this clear shape. The bigger the array delay, the bigger gets the minimum amount of money that airlines can spend.
+![Money lost to delays](../../plots/delays/money_lost_scatter_better.png)
+We can see a beautiful pattern emerging from the first 60k rows of data, showcasing the relationship between features. The bigger the array delay, the bigger gets the minimum amount of money that airlines can spend.
 
 
 
