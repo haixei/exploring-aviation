@@ -116,3 +116,7 @@ def blended(X):
 
 ![Accuracy](../../plots/prices/Acc.png)
 
+After receiving this result I was surprised to see how well the SVR scored in comparison to other methods. It happened to the point that blending the models didn't seem to have that big of a power when it came to the final accuracy, and even lowered it a little bit. Despite the maximum difference being equal to only 0.05, it still made me wonder if perhaps the model was the best suited for the task and my configuration of the rest of them wasn't really the deciding factor. Just a small note to those not familiar with SVM's, they are very flexible algorithms that not only prevents overfitting quite well but also model non-linear relationships between data.
+
+Having this information, I think if the code was supposed to be deployed, using the SVR alone would be the best option as it saves time and doesn't cost us any accuracy.
+
